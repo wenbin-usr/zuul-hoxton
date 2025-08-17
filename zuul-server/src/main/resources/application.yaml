@@ -1,0 +1,37 @@
+server:
+  port: 9000
+
+spring:
+  application:
+    name: zuul-server
+
+
+# 路由规则
+#zuul:
+#  routes:
+#    product-service:              #
+#      path: /product-service/**   # 配置请求url的映射路径
+#      serviceId: product-service  # 根据serviceId自动从注册中心获取服务地址并转发请求
+#zuul:
+#  routes:
+#    product-service: /product-service/**
+#    order-service: /order-service/**
+
+# 配置Eureka Server注册中心
+eureka:
+  instance:
+    prefer-ip-address: true       # 是否使用ip地址注册
+    instance-id: ${spring.cloud.client.ip-address}:${server.port} # ip:port
+  client:
+    service-url:                  # 设置服务注册中心地址
+      defaultZone: http://localhost:8761/eureka/,http://localhost:8762/eureka/
+
+# 度量指标监控与健康检查
+management:
+  endpoints:
+    web:
+      exposure:
+        include: hystrix.stream
+hystrix:
+  dashboard:
+    proxyStreamAllowList: localhost, 127.0.0.1
